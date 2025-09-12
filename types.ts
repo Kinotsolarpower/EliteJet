@@ -1,3 +1,5 @@
+
+
 export enum RequestStatus {
     REQUESTED = 'REQUESTED',
     ASSIGNED = 'ASSIGNED',
@@ -12,7 +14,9 @@ export type JetStatus = 'Ready' | 'Service Due' | 'In Service';
 export interface Jet {
     id: string;
     name: string;
-    model: string;
+    brand: string;
+    type: string;
+    version: string;
     tailNumber: string;
     imageUrl: string;
     range: number; // in nautical miles
@@ -20,6 +24,26 @@ export interface Jet {
     lastServiceDate: string; // YYYY-MM-DD
     status: JetStatus;
 }
+
+export interface CrewMember {
+    id: string;
+    name: string;
+    role: string;
+    photoUrl: string;
+    certifications: string[];
+}
+
+export type ChecklistItemStatus = 'PENDING' | 'APPROVED' | 'FLAGGED';
+
+export interface ChecklistItem {
+    itemKey: string;
+    status: ChecklistItemStatus;
+    beforePhotoUrl?: string;
+    afterPhotoUrl?: string;
+}
+
+export type VeritasStatus = 'PENDING' | 'CERTIFIED' | 'NEEDS_REVIEW';
+
 
 export interface ServiceRequest {
     id: string;
@@ -31,11 +55,9 @@ export interface ServiceRequest {
     status: RequestStatus;
     provider?: string;
     cost?: number;
-    photos: {
-        before: string[];
-        after: string[];
-    };
-    checklist: { itemKey: string; completed: boolean }[];
+    veritasStatus: VeritasStatus;
+    checklist: ChecklistItem[];
+    crew?: CrewMember[];
     messages: {
         id: string;
         sender: 'owner' | 'provider' | 'system';
@@ -56,16 +78,28 @@ export interface Notification {
     isRead: boolean;
 }
 
+export type InvoiceStatus = 'Paid' | 'Due' | 'Overdue';
+
 export interface Invoice {
     id: string;
     requestId: string;
+    jetName: string;
+    jetTailNumber: string;
+    serviceType: string;
     amount: number;
     date: string;
-    status: 'Paid' | 'Due';
+    status: InvoiceStatus;
+    paymentMethod?: string;
+    transactionId?: string;
 }
 
+
 export interface User {
-    name: string;
-    role: string;
+    name: string; // This can be company name or full name
+    firstName?: string;
+    lastName?: string;
+    companyName?: string;
+    role: 'Operator' | 'Client' | 'Provider';
     avatarUrl: string;
+    onboardingCompleted: boolean;
 }

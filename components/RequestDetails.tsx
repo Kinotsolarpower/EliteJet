@@ -1,23 +1,111 @@
 import React, { useState } from 'react';
-import { ServiceRequest, Jet, RequestStatus } from '../types';
+import { ServiceRequest, Jet, RequestStatus, CrewMember, ChecklistItem, User } from '../types';
 import { MOCK_JETS, CHECKLIST_ITEMS } from '../constants';
 import { useTranslation } from '../lib/i18n';
 import { ArrowLeftIcon } from './icons/ArrowLeftIcon';
 import { CheckCircleIcon } from './icons/CheckCircleIcon';
 import { StatusStepper } from './StatusStepper';
+import { VeritasCertifiedIcon } from './icons/VeritasCertifiedIcon';
+import { IdentificationIcon } from './icons/IdentificationIcon';
+import { FlagIcon } from './icons/FlagIcon';
+import { TranslationKey } from '../translations';
 
 interface RequestDetailsProps {
+    user: User;
     request: ServiceRequest;
     onBack: () => void;
     onUpdateRequest: (request: ServiceRequest) => void;
+    onCompleteService: (request: ServiceRequest) => void;
 }
 
-const PhotoCard: React.FC<{ src: string }> = ({ src }) => (
-    <img src={src} className="w-full h-32 object-cover rounded-lg shadow-sm" alt="service" />
-);
+const DiscreetCrewPassport: React.FC<{ crew: CrewMember[] }> = ({ crew }) => {
+    const { t } = useTranslation();
+    return (
+        <div className="bg-accent p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold text-slate-300 mb-4 flex items-center">
+                <IdentificationIcon className="h-6 w-6 mr-3 text-secondary"/>
+                {t('requestDetails.discreetCrewPassport')}
+            </h2>
+            <div className="space-y-4">
+                {crew.map(member => (
+                    <div key={member.id} className="flex items-center gap-4">
+                        <img src={member.photoUrl} alt={member.name} className="h-14 w-14 rounded-full object-cover"/>
+                        <div>
+                            <p className="font-bold text-white">{member.name}</p>
+                            <p className="text-sm text-slate-400">{member.role}</p>
+                            <p className="text-xs text-slate-500 mt-1">
+                                <span className="font-semibold">{t('requestDetails.certifications')}: </span> 
+                                {member.certifications.join(', ')}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+};
 
+const VeritasChecklistItem: React.FC<{ item: ChecklistItem }> = ({ item }) => {
+    const { t } = useTranslation();
 
-export const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onBack, onUpdateRequest }) => {
+    const statusConfig = {
+        'APPROVED': { icon: <CheckCircleIcon className="h-6 w-6 text-secondary" />, color: 'text-green-300', bgColor: 'bg-green-500/10' },
+        'FLAGGED': { icon: <FlagIcon className="h-6 w-6 text-yellow-400" />, color: 'text-yellow-300', bgColor: 'bg-yellow-500/10' },
+        'PENDING': { icon: <CheckCircleIcon className="h-6 w-6 text-slate-600" />, color: 'text-slate-400', bgColor: 'bg-accent-dark' },
+    }
+
+    const config = statusConfig[item.status];
+    
+    return (
+        <div className="py-4 border-b border-accent-dark last:border-b-0">
+             <div className={`flex items-center p-3 rounded-md mb-4 ${config.bgColor}`}>
+                {config.icon}
+                <div className="ml-4 flex-1">
+                    <p className={`font-semibold ${config.color}`}>{CHECKLIST_ITEMS[item.itemKey as keyof typeof CHECKLIST_ITEMS]}</p>
+                    <p className={`text-sm ${config.color}/80`}>{t(`requestDetails.itemStatus.${item.status.toLowerCase()}` as TranslationKey)}</p>
+                </div>
+            </div>
+            {(item.beforePhotoUrl || item.afterPhotoUrl) && (
+                <div className="grid grid-cols-2 gap-4 mt-2 px-3">
+                    <div>
+                        <h4 className="font-semibold text-slate-300 text-sm mb-2">{t('requestDetails.before')}</h4>
+                        {item.beforePhotoUrl ? <img src={item.beforePhotoUrl} className="w-full h-32 object-cover rounded-lg" alt="Before"/> : <div className="w-full h-32 bg-accent-dark rounded-lg flex items-center justify-center text-slate-500 text-sm">N/A</div>}
+                    </div>
+                     <div>
+                        <h4 className="font-semibold text-slate-300 text-sm mb-2">{t('requestDetails.after')}</h4>
+                        {item.afterPhotoUrl ? <img src={item.afterPhotoUrl} className="w-full h-32 object-cover rounded-lg" alt="After"/> : <div className="w-full h-32 bg-accent-dark rounded-lg flex items-center justify-center text-slate-500 text-sm">N/A</div>}
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+};
+
+const VeritasQualityReport: React.FC<{ request: ServiceRequest }> = ({ request }) => {
+    const { t } = useTranslation();
+    return (
+        <div className="bg-accent p-6 rounded-lg shadow-md">
+            <div className="flex justify-between items-start mb-4">
+                <div>
+                    <h2 className="text-xl font-semibold text-slate-300">{t('requestDetails.veritasReport')}</h2>
+                </div>
+                {request.veritasStatus === 'CERTIFIED' && (
+                     <div className="flex items-center gap-2 bg-green-500/20 text-green-300 font-semibold px-3 py-1 rounded-full text-sm">
+                        <VeritasCertifiedIcon className="h-5 w-5"/>
+                        <span>{t('requestDetails.veritasCertified')}</span>
+                     </div>
+                )}
+            </div>
+             <div>
+                {request.checklist.length > 0 ? request.checklist.map(item => (
+                    <VeritasChecklistItem key={item.itemKey} item={item} />
+                )) : <p className="text-sm text-slate-500 py-8 text-center">No checklist for this service type.</p>}
+            </div>
+        </div>
+    );
+};
+
+export const RequestDetails: React.FC<RequestDetailsProps> = ({ user, request, onBack, onUpdateRequest, onCompleteService }) => {
     const { t } = useTranslation();
     const jet = MOCK_JETS.find(j => j.id === request.jetId) as Jet;
     const [message, setMessage] = useState('');
@@ -34,17 +122,57 @@ export const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onBack,
         setMessage('');
     };
     
-    const handleApproveService = () => {
-        const alreadyApproved = request.history.find(h => h.status === RequestStatus.APPROVED);
-        if (alreadyApproved) return;
+    const handleUpdateStatus = (newStatus: RequestStatus) => {
+         const alreadyExists = request.history.find(h => h.status === newStatus);
+        if (alreadyExists) return;
         
         const updatedRequest = {
             ...request,
-            status: RequestStatus.APPROVED,
-            history: [...request.history, { status: RequestStatus.APPROVED, timestamp: new Date().toISOString() }]
+            status: newStatus,
+            history: [...request.history, { status: newStatus, timestamp: new Date().toISOString() }]
         };
         onUpdateRequest(updatedRequest);
     };
+
+    const renderProviderActions = () => {
+        if (user.role !== 'Provider') return null;
+
+        switch (request.status) {
+            case RequestStatus.ASSIGNED:
+                return (
+                    <button onClick={() => handleUpdateStatus(RequestStatus.IN_PROGRESS)} className="w-full py-2 px-4 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">
+                        {t('requestDetails.providerActions.startService')}
+                    </button>
+                );
+            case RequestStatus.IN_PROGRESS:
+                 return (
+                    <button onClick={() => onCompleteService(request)} className="w-full py-2 px-4 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition-colors">
+                        {t('requestDetails.providerActions.completeService')}
+                    </button>
+                );
+            default:
+                return null;
+        }
+    };
+    
+    const renderClientActions = () => {
+        if (user.role !== 'Client') return null;
+        
+        if (request.status === RequestStatus.COMPLETED) {
+            return (
+                <>
+                    <button onClick={() => handleUpdateStatus(RequestStatus.APPROVED)} className="w-full py-2 px-4 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition-colors mb-3">
+                        {t('requestDetails.approveService')}
+                    </button>
+                    <button className="w-full py-2 px-4 bg-slate-600 text-slate-200 font-semibold rounded-lg hover:bg-slate-700 transition-colors">
+                        {t('requestDetails.requestChanges')}
+                    </button>
+                </>
+            )
+        }
+        return null;
+    }
+
 
     return (
         <div>
@@ -61,37 +189,7 @@ export const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onBack,
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content */}
                 <div className="lg:col-span-2 space-y-8">
-                    {/* Photo Gallery */}
-                    <div className="bg-accent p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold text-slate-300 mb-4">{t('requestDetails.photoGallery')}</h2>
-                        <div className="grid grid-cols-2 gap-6">
-                           <div>
-                                <h3 className="font-bold text-white mb-2">{t('requestDetails.before')}</h3>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {request.photos.before.length > 0 ? request.photos.before.map((p, i) => <PhotoCard key={i} src={p}/>) : <p className="text-sm text-slate-500 col-span-2">No photos yet.</p>}
-                                </div>
-                           </div>
-                           <div>
-                                <h3 className="font-bold text-white mb-2">{t('requestDetails.after')}</h3>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {request.photos.after.length > 0 ? request.photos.after.map((p, i) => <PhotoCard key={i} src={p}/>) : <p className="text-sm text-slate-500 col-span-2">No photos yet.</p>}
-                                </div>
-                           </div>
-                        </div>
-                    </div>
-
-                    {/* Checklist */}
-                     <div className="bg-accent p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold text-slate-300 mb-4">{t('requestDetails.checklist')}</h2>
-                         <div className="space-y-3">
-                             {request.checklist.length > 0 ? request.checklist.map(item => (
-                                 <div key={item.itemKey} className={`flex items-center p-3 rounded-md ${item.completed ? 'bg-green-500/20 text-green-300' : 'bg-accent-dark text-slate-300'}`}>
-                                     <CheckCircleIcon className={`h-6 w-6 mr-3 ${item.completed ? 'text-secondary' : 'text-slate-600'}`} />
-                                     <span>{CHECKLIST_ITEMS[item.itemKey as keyof typeof CHECKLIST_ITEMS]}</span>
-                                 </div>
-                             )) : <p className="text-sm text-slate-500">No checklist for this service type.</p>}
-                         </div>
-                    </div>
+                   <VeritasQualityReport request={request} />
                 </div>
 
                 {/* Sidebar */}
@@ -101,12 +199,24 @@ export const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onBack,
                         <StatusStepper request={request} />
                     </div>
 
+                    {request.crew && request.crew.length > 0 && (
+                        <DiscreetCrewPassport crew={request.crew} />
+                    )}
+                    
+                    {(renderClientActions() || renderProviderActions()) && (
+                        <div className="bg-accent p-6 rounded-lg shadow-md">
+                            {renderClientActions()}
+                            {renderProviderActions()}
+                        </div>
+                    )}
+
+
                     <div className="bg-accent p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-semibold text-slate-300 mb-4">{t('requestDetails.chat')}</h2>
                         <div className="h-48 overflow-y-auto bg-accent-dark p-3 rounded-md mb-4 space-y-3">
                            {request.messages.map(msg => (
-                               <div key={msg.id} className={`flex ${msg.sender === 'owner' ? 'justify-end' : 'justify-start'}`}>
-                                   <div className={`p-2 rounded-lg max-w-xs ${msg.sender === 'owner' ? 'bg-secondary text-white' : 'bg-slate-700 text-slate-200 shadow-sm'}`}>
+                               <div key={msg.id} className={`flex ${msg.sender === user.role.toLowerCase() ? 'justify-end' : 'justify-start'}`}>
+                                   <div className={`p-2 rounded-lg max-w-xs ${msg.sender === user.role.toLowerCase() ? 'bg-secondary text-white' : 'bg-slate-700 text-slate-200 shadow-sm'}`}>
                                        <p className="text-sm">{msg.text}</p>
                                    </div>
                                </div>
@@ -117,13 +227,6 @@ export const RequestDetails: React.FC<RequestDetailsProps> = ({ request, onBack,
                             <button onClick={handleSendMessage} className="py-2 px-4 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700">{t('requestDetails.sendMessage')}</button>
                         </div>
                     </div>
-                    
-                     {request.status === RequestStatus.COMPLETED && (
-                        <div className="bg-accent p-6 rounded-lg shadow-md">
-                            <button onClick={handleApproveService} className="w-full py-2 px-4 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 transition-colors mb-3">{t('requestDetails.approveService')}</button>
-                            <button className="w-full py-2 px-4 bg-slate-600 text-slate-200 font-semibold rounded-lg hover:bg-slate-700 transition-colors">{t('requestDetails.requestChanges')}</button>
-                        </div>
-                     )}
                 </div>
             </div>
         </div>

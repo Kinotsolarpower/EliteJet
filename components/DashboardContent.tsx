@@ -1,12 +1,14 @@
+
 import React from 'react';
 import { MOCK_JETS, MOCK_INVOICES } from '../constants';
 import { useTranslation } from '../lib/i18n';
 import { View } from './Sidebar';
-import { RequestStatus, ServiceRequest } from '../types';
+import { RequestStatus, ServiceRequest, User } from '../types';
 import { ArrowRightIcon } from './icons/ArrowRightIcon';
 import { DocumentTextIcon } from './icons/DocumentTextIcon';
 
 interface DashboardContentProps {
+    user: User;
     requests: ServiceRequest[];
     setActiveView: (view: View) => void;
     onSelectRequest: (request: ServiceRequest) => void;
@@ -31,29 +33,35 @@ const ActionItem: React.FC<{ text: string, onClick?: () => void }> = ({ text, on
     </div>
 )
 
-export const DashboardContent: React.FC<DashboardContentProps> = ({ requests, setActiveView, onSelectRequest }) => {
+export const DashboardContent: React.FC<DashboardContentProps> = ({ user, requests, setActiveView, onSelectRequest }) => {
     const { t } = useTranslation();
     
     const activeRequests = requests.filter(r => [RequestStatus.ASSIGNED, RequestStatus.IN_PROGRESS, RequestStatus.REQUESTED].includes(r.status));
     const pendingActions = requests.filter(r => r.status === RequestStatus.COMPLETED);
+    const userRole = user.role;
+    
+    // Operators should not have 'View Requests' CTAs on stat cards, as they manage the whole system.
+    // Clients should be guided to their requests.
+    const showRequestCtas = userRole === 'Client';
+    const welcomeUser = user.firstName || user.name;
 
     return (
         <div>
             <h1 className="text-3xl font-bold text-white mb-2">{t('dashboard.title')}</h1>
-            <p className="text-slate-400 mb-6">{t('dashboard.welcome')}</p>
+            <p className="text-slate-400 mb-6">{t('dashboard.welcome', [welcomeUser])}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <StatCard 
                     title={t('dashboard.activeRequests')} 
                     value={activeRequests.length.toString()} 
-                    onClick={() => setActiveView('requests')}
-                    cta={t('dashboard.viewRequests')}
+                    onClick={showRequestCtas ? () => setActiveView('requests') : undefined}
+                    cta={showRequestCtas ? t('dashboard.viewRequests') : undefined}
                 />
                 <StatCard 
                     title={t('dashboard.pendingActions')} 
                     value={pendingActions.length.toString()} 
-                    onClick={() => setActiveView('requests')}
-                    cta={t('dashboard.viewRequests')}
+                    onClick={showRequestCtas ? () => setActiveView('requests') : undefined}
+                    cta={showRequestCtas ? t('dashboard.viewRequests') : undefined}
                 />
                 <StatCard 
                     title={t('dashboard.fleetStatus')} 
@@ -72,7 +80,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ requests, se
                                 const jet = MOCK_JETS.find(j => j.id === req.jetId);
                                 return <ActionItem 
                                     key={req.id} 
-                                    text={t('dashboard.approveService', jet?.tailNumber || '')} 
+                                    text={t('dashboard.approveService', [jet?.tailNumber || ''])} 
                                     onClick={() => onSelectRequest(req)} 
                                 />
                             })

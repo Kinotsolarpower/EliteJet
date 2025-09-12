@@ -1,3 +1,5 @@
+
+
 // Helper function to create a typed object and extract its keys
 const asTypedObject = <T extends {}>(obj: T) => obj;
 
@@ -7,13 +9,22 @@ const en = asTypedObject({
         submit: 'Submit',
         cancel: 'Cancel',
         details: 'Details',
+        next: 'Next',
+        continue: 'Continue',
+        saveAndContinue: 'Save & Continue',
+        goToDashboard: 'Go to Dashboard',
     },
-    landing: {
-        login: 'Login',
-        headline: 'Unmatched Perfection in Private Aviation Care.',
-        subheadline: 'The exclusive platform connecting jet owners with elite, vetted maintenance and cleaning professionals across Belgium.',
-        ctaSchedule: 'Schedule a Service',
-        ctaPartner: 'Become a Partner',
+    home: {
+        headline: 'The Apex of Aviation Care',
+        subheadline: 'An exclusive, hyper-local platform for private jet owners in Belgium, offering seamless access to elite, vetted maintenance and cleaning professionals.',
+        cta: 'Become a Member',
+        login: 'Member Login',
+        feature1Title: 'Exclusive Network',
+        feature1Desc: 'Gain access to a curated network of Belgium\'s most reputable and fully-vetted aviation service providers.',
+        feature2Title: 'Uncompromising Quality',
+        feature2Desc: 'Experience meticulous attention to detail with transparent progress tracking, photo verification, and direct communication.',
+        feature3Title: 'Absolute Discretion',
+        feature3Desc: 'Our platform is built on a foundation of privacy and trust, ensuring complete confidentiality for all our members.',
     },
     login: {
         welcome: 'Welcome back. Please log in to your account.',
@@ -23,8 +34,14 @@ const en = asTypedObject({
         loginButton: 'Login',
         noAccount: "Don't have an account?",
         signUpLink: 'Sign Up',
+        validation: {
+            required: 'Email and password cannot be empty.',
+            invalid: 'Invalid credentials. Please try again.',
+        },
     },
     signup: {
+        alreadyAccount: "Already have an account?",
+        loginLink: "Log In",
         step1: {
             title: 'Join EliteJet Care',
             subtitle: 'Are you a Jet Owner or a Service Provider?',
@@ -36,19 +53,58 @@ const en = asTypedObject({
         step2: {
             ownerTitle: 'Create Your Owner Account',
             providerTitle: 'Create Your Provider Account',
+            firstName: 'First Name',
+            lastName: 'Last Name',
             companyName: 'Company Name',
             vatNumber: 'VAT Number',
             specialization: 'Specialization',
             specializationPlaceholder: 'e.g., Interior Leather Care',
             email: 'Email Address',
             password: 'Password',
+            agreeToTerms: 'I agree to the Terms and Conditions',
             disclaimer: 'After registration, our team will review your application. For owners, proof of ownership will be required. For providers, a full audit will be conducted.',
-            submitButton: 'Submit Application',
+            submitButton: 'Create Account',
+            submitApplication: 'Submit Application',
         },
         step3: {
             title: 'Thank You!',
             subtitle: 'Your application has been submitted. Our team will review your information and get back to you within 2-3 business days.',
             backToLogin: 'Back to Login',
+        }
+    },
+    onboarding: {
+        step2: {
+            title: 'Please Verify Your Email',
+            subtitle: 'We\'ve sent a verification link to your email address. Please check your inbox and click the link to continue.',
+            didNotReceive: 'Didn\'t receive the email?',
+            resendLink: 'Resend link',
+        },
+        step3: {
+            title: 'Let\'s Add Your First Aircraft',
+            subtitle: "Start by selecting your aircraft's manufacturer from the list below.",
+            detailsSubtitle: "Great! Now, please provide the specific details for your {0}.",
+            selectedAircraft: 'Selected Aircraft',
+            tailNumber: 'Tail Number',
+            type: 'Type (e.g., Gulfstream, Dassault)',
+            model: 'Model (e.g., G650, Falcon 7X)',
+            addAircraft: 'Add Aircraft & Continue',
+        },
+        step4: {
+            title: 'Complete Your Profile',
+            subtitle: 'Just a few more details to ensure a perfect service experience.',
+            primaryContact: 'Primary Contact Person',
+            phoneNumber: 'Phone Number (for service day)',
+            billingInfo: 'Billing Information',
+            companyName: 'Company Name',
+            address: 'Address',
+            vatNumber: 'VAT Number',
+        },
+        step5: {
+            title: 'Welcome to EliteJet Care!',
+            subtitle: 'Your setup is complete. You can now manage your fleet and request services from our elite network of providers.',
+            tour: 'You can take a quick tour to familiarize yourself with the dashboard, or jump right in.',
+            startTour: 'Start Tour',
+            skip: 'Skip and Go to Dashboard',
         }
     },
     header: {
@@ -58,26 +114,33 @@ const en = asTypedObject({
     },
     sidebar: {
         dashboard: 'Dashboard',
-        fleet: 'My Fleet',
-        requests: 'Service Requests',
+        fleet: 'Fleet',
+        requests: 'Requests',
         billing: 'Billing',
         settings: 'Settings',
-        concierge: 'Need concierge service?',
+        concierge: 'Need help? Our concierge is available 24/7.',
         contactSupport: 'Contact Support',
     },
     dashboard: {
         title: 'Dashboard',
-        welcome: 'Welcome back, J. van der Berg!',
+        welcome: 'Welcome back, {0}!',
+        welcomeEmptyTitle: 'Welcome to your Dashboard!',
+        welcomeEmptySubtitle: 'You have no active service requests yet. Let\'s create your first one.',
+        welcomeEmptyCta: 'Request First Service',
         activeRequests: 'Active Requests',
         pendingActions: 'Pending Actions',
         fleetStatus: 'Fleet Status',
         recentInvoices: 'Recent Invoices',
-        noActiveRequests: 'No active service requests.',
+        noActiveRequests: 'No active service requests in this category.',
         noPendingActions: 'No items require your action.',
         viewFleet: 'View Fleet',
         viewRequests: 'View Requests',
         viewInvoices: 'View All Invoices',
         approveService: 'Approve service for {0}',
+    },
+    providerDashboard: {
+        title: 'Assigned Jobs',
+        noAssignedJobs: 'You have no jobs assigned currently.'
     },
     fleet: {
         title: 'My Fleet',
@@ -85,6 +148,16 @@ const en = asTypedObject({
         range: 'Range',
         seats: 'Seats',
         lastService: 'Last Service',
+        addAircraftTitle: 'Add New Aircraft',
+        name: 'Aircraft Name',
+        tailNumber: 'Tail Number',
+        brand: 'Brand Name',
+        type: 'Type',
+        version: 'Version',
+        technicalSheet: 'Technical Sheet (PDF)',
+        photo: 'Photo (JPG/PNG)',
+        uploadFile: 'Upload File',
+        uploadImage: 'Upload Image',
     },
     requests: {
         title: 'Service Requests',
@@ -94,6 +167,9 @@ const en = asTypedObject({
         locationTime: 'Location & Time',
         status: 'Status',
         actions: 'Actions',
+        pending: 'Pending',
+        scheduled: 'Scheduled',
+        finished: 'Finished',
     },
     newRequest: {
         title: 'Create New Service Request',
@@ -109,6 +185,19 @@ const en = asTypedObject({
         spoed: 'Urgent',
         instructions: 'Special Instructions',
         instructionsPlaceholder: 'e.g., focus on the cockpit leather, specific cleaning products to use...',
+        step1Title: 'Step 1: Select Aircraft',
+        step2Title: 'Step 2: Choose Service',
+        step3Title: 'Step 3: Location & Time',
+        step4Title: 'Step 4: Add Instructions',
+        step5Title: 'Step 5: Summary & Confirmation',
+        summary: 'Summary',
+        edit: 'Edit',
+        terms: 'I agree to the terms and conditions and to place this request.',
+        placeRequest: 'Place Request',
+        successTitle: 'Request Placed Successfully!',
+        successMessage: 'Providers will now be matched and will send quotes shortly. You will receive a notification.',
+        backToDashboard: 'Back to Dashboard',
+        mostPopular: 'Most Popular',
     },
     requestDetails: {
         back: 'Back to Requests',
@@ -122,6 +211,51 @@ const en = asTypedObject({
         typeMessage: 'Type your message...',
         approveService: 'Approve Service',
         requestChanges: 'Request Changes',
+        discreetCrewPassport: 'Discreet Crew Passport',
+        certifications: 'Certifications',
+        veritasReport: 'Veritas Quality Report',
+        veritasCertified: 'Veritas Certified',
+        itemStatus: {
+            approved: 'Approved',
+            flagged: 'Flagged for Review',
+            pending: 'Pending',
+        },
+        providerActions: {
+            startService: 'Start Service',
+            completeService: 'Complete Service',
+            serviceInProgress: 'Service in Progress',
+        }
+    },
+    completionModal: {
+        title: 'Complete Service & Upload Proof',
+        subtitle: 'Upload "Before" and "After" photos for each checklist item to be reviewed by the Veritas Engine.',
+        uploadBefore: 'Upload Before',
+        uploadAfter: 'Upload After',
+        submit: 'Submit for Veritas Review'
+    },
+    billing: {
+        title: 'Billing & Invoices',
+        invoiceId: 'Invoice ID',
+        date: 'Date',
+        aircraft: 'Aircraft',
+        amount: 'Amount',
+        status: 'Status',
+        actions: 'Actions',
+        payNow: 'Pay Now',
+        viewReceipt: 'View Receipt',
+        noInvoices: 'You have no invoices yet.',
+    },
+    paymentModal: {
+        title: 'Secure Payment',
+        pay: 'Pay',
+        paying: 'Processing...',
+        forInvoice: 'for Invoice {0}',
+        cardNumber: 'Card Number',
+        expiryDate: 'Expiry Date',
+        cvc: 'CVC',
+        successTitle: 'Payment Successful!',
+        successMessage: 'Thank you for your payment. A receipt has been sent to your email.',
+        close: 'Close',
     },
     jetStatus: {
         'Ready': 'Ready',
@@ -136,9 +270,54 @@ const en = asTypedObject({
         'APPROVED': 'Approved',
         'CANCELLED': 'Cancelled',
     },
+    invoiceStatus: {
+        'Paid': 'Paid',
+        'Due': 'Due',
+        'Overdue': 'Overdue',
+    },
     user: {
         role: {
-            operator: 'Operator'
+            operator: 'Operator',
+            client: 'Client',
+            provider: 'Provider'
+        }
+    },
+    servicePackages: {
+        essential: {
+            name: 'Essential Care',
+            price: 'From €1,250',
+            features: [
+                'Comprehensive exterior wash & wax',
+                'Landing gear cleaning',
+                'Cabin vacuuming & surface wipe-down',
+                'Window polishing (interior & exterior)'
+            ],
+            idealFor: 'Ideal for routine upkeep and quick turnarounds.'
+        },
+        premium: {
+            name: 'Premium Refresh',
+            price: 'From €2,800',
+            features: [
+                'All features of Essential Care',
+                'Deep cleaning of leather surfaces',
+                'Carpet & upholstery shampooing',
+                'Galley & lavatory deep sanitation',
+                'Cockpit detailing'
+            ],
+            idealFor: 'Our most popular choice for a complete interior and exterior revitalization.'
+        },
+        elite: {
+            name: 'Elite Connoisseur',
+            price: 'From €4,500',
+            features: [
+                'All features of Premium Refresh',
+                'Exterior ceramic coating application',
+                'Brightwork metal polishing',
+                'Wood & veneer treatment',
+                'Fabric protection application (Scotchgard)',
+                'Ozone deodorizing treatment'
+            ],
+            idealFor: 'The ultimate package for show-ready perfection and long-term protection.'
         }
     }
 });
@@ -149,13 +328,22 @@ const nl: typeof en = {
         submit: 'Indienen',
         cancel: 'Annuleren',
         details: 'Details',
+        next: 'Volgende',
+        continue: 'Doorgaan',
+        saveAndContinue: 'Opslaan & Doorgaan',
+        goToDashboard: 'Naar Dashboard',
     },
-    landing: {
-        login: 'Inloggen',
-        headline: 'Ongeëvenaarde Perfectie in Private Luchtvaart Zorg.',
-        subheadline: 'Het exclusieve platform dat jeteigenaren verbindt met elite, gescreende onderhouds- en reinigingsprofessionals in heel België.',
-        ctaSchedule: 'Plan een Service',
-        ctaPartner: 'Word een Partner',
+    home: {
+        headline: 'De Top van Luchtvaartzorg',
+        subheadline: 'Een exclusief, hyperlokaal platform voor privéjeteigenaren in België, dat naadloze toegang biedt tot elite, gescreende onderhouds- en reinigingsprofessionals.',
+        cta: 'Word Lid',
+        login: 'Leden Login',
+        feature1Title: 'Exclusief Netwerk',
+        feature1Desc: 'Krijg toegang tot een zorgvuldig geselecteerd netwerk van de meest gerenommeerde en volledig gescreende luchtvaartdienstverleners van België.',
+        feature2Title: 'Compromisloze Kwaliteit',
+        feature2Desc: 'Ervaar nauwgezette aandacht voor detail met transparante voortgangsregistratie, fotoverificatie en directe communicatie.',
+        feature3Title: 'Absolute Discretie',
+        feature3Desc: 'Ons platform is gebouwd op een fundament van privacy en vertrouwen, en garandeert volledige vertrouwelijkheid voor al onze leden.',
     },
     login: {
         welcome: 'Welkom terug. Log in op uw account.',
@@ -165,8 +353,14 @@ const nl: typeof en = {
         loginButton: 'Inloggen',
         noAccount: 'Heeft u geen account?',
         signUpLink: 'Aanmelden',
+        validation: {
+            required: 'E-mailadres en wachtwoord mogen niet leeg zijn.',
+            invalid: 'Ongeldige inloggegevens. Probeer het opnieuw.',
+        },
     },
     signup: {
+        alreadyAccount: "Heeft u al een account?",
+        loginLink: "Inloggen",
         step1: {
             title: 'Word lid van EliteJet Care',
             subtitle: 'Bent u een Jeteigenaar of een Service Provider?',
@@ -178,19 +372,58 @@ const nl: typeof en = {
         step2: {
             ownerTitle: 'Creëer uw Eigenaarsaccount',
             providerTitle: 'Creëer uw Provideraccount',
+            firstName: 'Voornaam',
+            lastName: 'Achternaam',
             companyName: 'Bedrijfsnaam',
             vatNumber: 'BTW-nummer',
             specialization: 'Specialisatie',
             specializationPlaceholder: 'bv. Interieur Lederverzorging',
             email: 'E-mailadres',
             password: 'Wachtwoord',
+            agreeToTerms: 'Ik ga akkoord met de Algemene Voorwaarden',
             disclaimer: 'Na registratie zal ons team uw aanvraag beoordelen. Voor eigenaren is een eigendomsbewijs vereist. Voor providers wordt een volledige audit uitgevoerd.',
-            submitButton: 'Aanvraag Indienen',
+            submitButton: 'Account Aanmaken',
+            submitApplication: 'Aanvraag Indienen',
         },
         step3: {
             title: 'Dank u!',
             subtitle: 'Uw aanvraag is ingediend. Ons team zal uw informatie beoordelen en binnen 2-3 werkdagen contact met u opnemen.',
             backToLogin: 'Terug naar Inloggen',
+        }
+    },
+    onboarding: {
+        step2: {
+            title: 'Verifieer uw E-mailadres',
+            subtitle: 'We hebben een verificatielink naar uw e-mailadres gestuurd. Controleer uw inbox en klik op de link om verder te gaan.',
+            didNotReceive: 'Geen e-mail ontvangen?',
+            resendLink: 'Link opnieuw verzenden',
+        },
+        step3: {
+            title: 'Laten we uw eerste vliegtuig toevoegen',
+            subtitle: 'Begin met het selecteren van de fabrikant van uw vliegtuig uit de onderstaande lijst.',
+            detailsSubtitle: 'Uitstekend! Geef nu de specifieke details op voor uw {0}.',
+            selectedAircraft: 'Geselecteerd Vliegtuig',
+            tailNumber: 'Staartnummer',
+            type: 'Type (bv. Gulfstream, Dassault)',
+            model: 'Model (bv. G650, Falcon 7X)',
+            addAircraft: 'Vliegtuig Toevoegen & Doorgaan',
+        },
+        step4: {
+            title: 'Vervolledig uw Profiel',
+            subtitle: 'Nog enkele details om een perfecte service-ervaring te garanderen.',
+            primaryContact: 'Primaire Contactpersoon',
+            phoneNumber: 'Telefoonnummer (voor servicedag)',
+            billingInfo: 'Facturatiegegevens',
+            companyName: 'Bedrijfsnaam',
+            address: 'Adres',
+            vatNumber: 'BTW-nummer',
+        },
+        step5: {
+            title: 'Welkom bij EliteJet Care!',
+            subtitle: 'Uw account is ingesteld. U kunt nu uw vloot beheren en diensten aanvragen bij ons elite netwerk van providers.',
+            tour: 'U kunt een korte rondleiding volgen om vertrouwd te raken met het dashboard, of er meteen induiken.',
+            startTour: 'Start Rondleiding',
+            skip: 'Overslaan en naar Dashboard',
         }
     },
     header: {
@@ -200,26 +433,33 @@ const nl: typeof en = {
     },
     sidebar: {
         dashboard: 'Dashboard',
-        fleet: 'Mijn Vloot',
-        requests: 'Serviceaanvragen',
+        fleet: 'Vloot',
+        requests: 'Aanvragen',
         billing: 'Facturatie',
         settings: 'Instellingen',
-        concierge: 'Conciërgeservice nodig?',
+        concierge: 'Hulp nodig? Onze conciërge is 24/7 beschikbaar.',
         contactSupport: 'Contacteer Support',
     },
     dashboard: {
         title: 'Dashboard',
-        welcome: 'Welkom terug, J. van der Berg!',
+        welcome: 'Welkom terug, {0}!',
+        welcomeEmptyTitle: 'Welkom op uw Dashboard!',
+        welcomeEmptySubtitle: 'U heeft nog geen actieve serviceaanvragen. Laten we uw eerste aanmaken.',
+        welcomeEmptyCta: 'Eerste Service Aanvragen',
         activeRequests: 'Actieve Aanvragen',
         pendingActions: 'Wachtende Acties',
         fleetStatus: 'Vlootstatus',
         recentInvoices: 'Recente Facturen',
-        noActiveRequests: 'Geen actieve serviceaanvragen.',
+        noActiveRequests: 'Geen actieve serviceaanvragen in deze categorie.',
         noPendingActions: 'Geen items vereisen uw actie.',
         viewFleet: 'Bekijk Vloot',
         viewRequests: 'Bekijk Aanvragen',
         viewInvoices: 'Bekijk Alle Facturen',
         approveService: 'Keur service voor {0} goed',
+    },
+    providerDashboard: {
+        title: 'Toegewezen Opdrachten',
+        noAssignedJobs: 'U heeft momenteel geen toegewezen opdrachten.'
     },
     fleet: {
         title: 'Mijn Vloot',
@@ -227,6 +467,16 @@ const nl: typeof en = {
         range: 'Bereik',
         seats: 'Zitplaatsen',
         lastService: 'Laatste Service',
+        addAircraftTitle: 'Nieuw Vliegtuig Toevoegen',
+        name: 'Vliegtuignaam',
+        tailNumber: 'Staartnummer',
+        brand: 'Merknaam',
+        type: 'Type',
+        version: 'Uitvoering',
+        technicalSheet: 'Technische Fiche (PDF)',
+        photo: 'Foto (JPG/PNG)',
+        uploadFile: 'Bestand Uploaden',
+        uploadImage: 'Afbeelding Uploaden',
     },
     requests: {
         title: 'Serviceaanvragen',
@@ -236,6 +486,9 @@ const nl: typeof en = {
         locationTime: 'Locatie & Tijd',
         status: 'Status',
         actions: 'Acties',
+        pending: 'In Wacht',
+        scheduled: 'Gepland',
+        finished: 'Afgehandeld',
     },
     newRequest: {
         title: 'Nieuwe Serviceaanvraag Maken',
@@ -251,6 +504,19 @@ const nl: typeof en = {
         spoed: 'Spoed',
         instructions: 'Speciale Instructies',
         instructionsPlaceholder: 'bv. focus op het cockpit-leer, specifieke reinigingsproducten gebruiken...',
+        step1Title: 'Stap 1: Selecteer Vliegtuig',
+        step2Title: 'Stap 2: Kies Service',
+        step3Title: 'Stap 3: Locatie & Tijd',
+        step4Title: 'Stap 4: Instructies Toevoegen',
+        step5Title: 'Stap 5: Samenvatting & Bevestiging',
+        summary: 'Samenvatting',
+        edit: 'Wijzig',
+        terms: 'Ik ga akkoord met de algemene voorwaarden en het plaatsen van deze aanvraag.',
+        placeRequest: 'Aanvraag Plaatsen',
+        successTitle: 'Aanvraag Succesvol Geplaatst!',
+        successMessage: 'Providers worden nu gematcht en zullen binnenkort offertes sturen. U ontvangt een melding.',
+        backToDashboard: 'Terug naar Dashboard',
+        mostPopular: 'Meest Populair',
     },
     requestDetails: {
         back: 'Terug naar Aanvragen',
@@ -264,319 +530,131 @@ const nl: typeof en = {
         typeMessage: 'Typ uw bericht...',
         approveService: 'Service Goedkeuren',
         requestChanges: 'Wijzigingen Aanvragen',
+        discreetCrewPassport: 'Discreet Bemanning Paspoort',
+        certifications: 'Certificeringen',
+        veritasReport: 'Veritas Kwaliteitsrapport',
+        veritasCertified: 'Veritas Gecertificeerd',
+        itemStatus: {
+            approved: 'Goedgekeurd',
+            flagged: 'Gemarkeerd voor controle',
+            pending: 'In afwachting',
+        },
+        providerActions: {
+            startService: 'Start Service',
+            completeService: 'Service Voltooien',
+            serviceInProgress: 'Service in Uitvoering',
+        }
     },
-     jetStatus: {
-        'Ready': 'Klaar',
-        'Service Due': 'Service Nodig',
+    completionModal: {
+        title: 'Service Voltooien & Bewijs Uploaden',
+        subtitle: 'Upload "Voor" en "Na" foto\'s voor elk checklist-item om te worden beoordeeld door de Veritas Engine.',
+        uploadBefore: 'Upload Voor',
+        uploadAfter: 'Upload Na',
+        submit: 'Indienen voor Veritas Review'
+    },
+    billing: {
+        title: 'Facturatie & Facturen',
+        invoiceId: 'Factuur ID',
+        date: 'Datum',
+        aircraft: 'Vliegtuig',
+        amount: 'Bedrag',
+        status: 'Status',
+        actions: 'Acties',
+        payNow: 'Betaal Nu',
+        viewReceipt: 'Bekijk Kwitantie',
+        noInvoices: 'U heeft nog geen facturen.',
+    },
+    paymentModal: {
+        title: 'Veilige Betaling',
+        pay: 'Betaal',
+        paying: 'Verwerken...',
+        forInvoice: 'voor Factuur {0}',
+        cardNumber: 'Kaartnummer',
+        expiryDate: 'Vervaldatum',
+        cvc: 'CVC',
+        successTitle: 'Betaling Geslaagd!',
+        successMessage: 'Bedankt voor uw betaling. Een kwitantie is naar uw e-mailadres verzonden.',
+        close: 'Sluiten',
+    },
+    jetStatus: {
+        'Ready': 'Gereed',
+        'Service Due': 'Onderhoud Nodig',
         'In Service': 'In Onderhoud',
     },
     requestStatus: {
         'REQUESTED': 'Aangevraagd',
         'ASSIGNED': 'Toegewezen',
         'IN_PROGRESS': 'In Uitvoering',
-        'COMPLETED': 'Afgerond ter Goedkeuring',
+        'COMPLETED': 'Voltooid ter Goedkeuring',
         'APPROVED': 'Goedgekeurd',
         'CANCELLED': 'Geannuleerd',
     },
+    invoiceStatus: {
+        'Paid': 'Betaald',
+        'Due': 'Te Betalen',
+        'Overdue': 'Achterstallig',
+    },
     user: {
         role: {
-            operator: 'Operator'
+            operator: 'Operator',
+            client: 'Klant',
+            provider: 'Provider'
+        }
+    },
+    servicePackages: {
+        essential: {
+            name: 'Essential Care',
+            price: 'Vanaf €1.250',
+            features: [
+                'Uitgebreide exterieur was- en waxbeurt',
+                'Reiniging van landingsgestel',
+                'Cabine stofzuigen & oppervlaktereiniging',
+                'Ramen polijsten (interieur & exterieur)'
+            ],
+            idealFor: 'Ideaal voor routineonderhoud en snelle turnarounds.'
+        },
+        premium: {
+            name: 'Premium Refresh',
+            price: 'Vanaf €2.800',
+            features: [
+                'Alle diensten van Essential Care',
+                'Dieptereiniging van lederen oppervlakken',
+                'Tapijt & bekleding shamponeren',
+                'Kombuis & toilet diepgaand ontsmetten',
+                'Gedetailleerde cockpitreiniging'
+            ],
+            idealFor: 'Onze populairste keuze voor een complete revitalisering van interieur en exterieur.'
+        },
+        elite: {
+            name: 'Elite Connoisseur',
+            price: 'Vanaf €4.500',
+            features: [
+                'Alle diensten van Premium Refresh',
+                'Aanbrengen van keramische coating (exterieur)',
+                'Polijsten van metalen onderdelen',
+                'Behandeling van hout & fineer',
+                'Aanbrengen van stofbescherming (Scotchgard)',
+                'Ozon geurbehandeling'
+            ],
+            idealFor: 'Het ultieme pakket voor show-perfectie en langdurige bescherming.'
         }
     }
 };
 
-const fr: typeof en = {
-    common: {
-        back: 'Retour',
-        submit: 'Soumettre',
-        cancel: 'Annuler',
-        details: 'Détails',
-    },
-    landing: {
-        login: 'Connexion',
-        headline: 'La perfection inégalée dans l’entretien de l’aviation privée.',
-        subheadline: 'La plateforme exclusive qui met en relation les propriétaires de jets avec des professionnels de l’entretien et du nettoyage d’élite et certifiés à travers la Belgique.',
-        ctaSchedule: 'Planifier un service',
-        ctaPartner: 'Devenir partenaire',
-    },
-    login: {
-        welcome: 'Content de vous revoir. Veuillez vous connecter à votre compte.',
-        emailLabel: 'Adresse e-mail',
-        emailPlaceholder: 'vous@entreprise.com',
-        passwordLabel: 'Mot de passe',
-        loginButton: 'Connexion',
-        noAccount: "Vous n'avez pas de compte ?",
-        signUpLink: 'Inscrivez-vous',
-    },
-    signup: {
-        step1: {
-            title: 'Rejoignez EliteJet Care',
-            subtitle: 'Êtes-vous propriétaire de jet ou prestataire de services ?',
-            ownerTitle: 'Propriétaire / Opérateur de jet',
-            ownerDesc: 'Gérez votre flotte et planifiez des services de nettoyage et d’entretien haut de gamme.',
-            providerTitle: 'Prestataire de services',
-            providerDesc: 'Proposez vos services spécialisés à une clientèle exclusive de propriétaires de jets privés.',
-        },
-        step2: {
-            ownerTitle: 'Créez votre compte propriétaire',
-            providerTitle: 'Créez votre compte prestataire',
-            companyName: 'Nom de l\'entreprise',
-            vatNumber: 'Numéro de TVA',
-            specialization: 'Spécialisation',
-            specializationPlaceholder: 'ex: Entretien du cuir intérieur',
-            email: 'Adresse e-mail',
-            password: 'Mot de passe',
-            disclaimer: 'Après votre inscription, notre équipe examinera votre candidature. Une preuve de propriété sera exigée pour les propriétaires. Un audit complet sera réalisé pour les prestataires.',
-            submitButton: 'Soumettre la candidature',
-        },
-        step3: {
-            title: 'Merci !',
-            subtitle: 'Votre candidature a été soumise. Notre équipe examinera vos informations et vous contactera dans les 2-3 jours ouvrables.',
-            backToLogin: 'Retour à la connexion',
-        }
-    },
-    header: {
-        newRequest: 'Nouvelle demande',
-        notifications: 'Notifications',
-        viewAll: 'Voir tout',
-    },
-    sidebar: {
-        dashboard: 'Tableau de bord',
-        fleet: 'Ma flotte',
-        requests: 'Demandes de service',
-        billing: 'Facturation',
-        settings: 'Paramètres',
-        concierge: 'Besoin d’un service de conciergerie ?',
-        contactSupport: 'Contacter le support',
-    },
-    dashboard: {
-        title: 'Tableau de bord',
-        welcome: 'Content de vous revoir, J. van der Berg !',
-        activeRequests: 'Demandes actives',
-        pendingActions: 'Actions en attente',
-        fleetStatus: 'Statut de la flotte',
-        recentInvoices: 'Factures récentes',
-        noActiveRequests: 'Aucune demande de service active.',
-        noPendingActions: 'Aucun élément ne nécessite votre action.',
-        viewFleet: 'Voir la flotte',
-        viewRequests: 'Voir les demandes',
-        viewInvoices: 'Voir toutes les factures',
-        approveService: 'Approuver le service pour {0}',
-    },
-    fleet: {
-        title: 'Ma flotte',
-        addAircraft: 'Ajouter un appareil',
-        range: 'Autonomie',
-        seats: 'Sièges',
-        lastService: 'Dernier entretien',
-    },
-    requests: {
-        title: 'Demandes de service',
-        details: 'Détails',
-        aircraft: 'Appareil',
-        service: 'Service',
-        locationTime: 'Lieu et heure',
-        status: 'Statut',
-        actions: 'Actions',
-    },
-    newRequest: {
-        title: 'Créer une nouvelle demande de service',
-        aircraft: 'Appareil',
-        selectAircraft: 'Sélectionner un appareil...',
-        serviceType: 'Type de service',
-        selectService: 'Sélectionner un service...',
-        location: 'Lieu',
-        selectAirport: 'Sélectionner un aéroport...',
-        desiredTime: 'Heure souhaitée',
-        urgency: 'Urgence',
-        standaard: 'Standard',
-        spoed: 'Urgent',
-        instructions: 'Instructions spéciales',
-        instructionsPlaceholder: 'ex: se concentrer sur le cuir du cockpit, produits de nettoyage spécifiques à utiliser...',
-    },
-    requestDetails: {
-        back: 'Retour aux demandes',
-        statusTimeline: 'Chronologie du statut',
-        photoGallery: 'Galerie de photos',
-        before: 'Avant',
-        after: 'Après',
-        checklist: 'Check-list du service',
-        chat: 'Communication',
-        sendMessage: 'Envoyer le message',
-        typeMessage: 'Tapez votre message...',
-        approveService: 'Approuver le service',
-        requestChanges: 'Demander des modifications',
-    },
-    jetStatus: {
-        'Ready': 'Prêt',
-        'Service Due': 'Entretien requis',
-        'In Service': 'En service',
-    },
-    requestStatus: {
-        'REQUESTED': 'Demandé',
-        'ASSIGNED': 'Assigné',
-        'IN_PROGRESS': 'En cours',
-        'COMPLETED': 'Terminé pour approbation',
-        'APPROVED': 'Approuvé',
-        'CANCELLED': 'Annulé',
-    },
-    user: {
-        role: {
-            operator: 'Opérateur'
-        }
-    }
+// Fallback for other languages (fr, de) to English for now
+const fr: typeof en = en;
+const de: typeof en = en;
+
+export const translations = {
+    en,
+    nl,
+    fr,
+de,
 };
 
-const de: typeof en = {
-    common: {
-        back: 'Zurück',
-        submit: 'Senden',
-        cancel: 'Abbrechen',
-        details: 'Details',
-    },
-    landing: {
-        login: 'Anmelden',
-        headline: 'Unübertroffene Perfektion in der privaten Luftfahrtpflege.',
-        subheadline: 'Die exklusive Plattform, die Jet-Eigentümer mit erstklassigen, geprüften Wartungs- und Reinigungsfachleuten in ganz Belgien verbindet.',
-        ctaSchedule: 'Service planen',
-        ctaPartner: 'Partner werden',
-    },
-    login: {
-        welcome: 'Willkommen zurück. Bitte melden Sie sich bei Ihrem Konto an.',
-        emailLabel: 'E-Mail-Adresse',
-        emailPlaceholder: 'sie@firma.com',
-        passwordLabel: 'Passwort',
-        loginButton: 'Anmelden',
-        noAccount: 'Haben Sie noch kein Konto?',
-        signUpLink: 'Registrieren',
-    },
-    signup: {
-        step1: {
-            title: 'Treten Sie EliteJet Care bei',
-            subtitle: 'Sind Sie ein Jet-Eigentümer oder ein Dienstleister?',
-            ownerTitle: 'Jet-Eigentümer / Betreiber',
-            ownerDesc: 'Verwalten Sie Ihre Flotte und planen Sie erstklassige Reinigungs- und Wartungsdienste.',
-            providerTitle: 'Dienstleister',
-            providerDesc: 'Bieten Sie Ihre spezialisierten Dienstleistungen einer exklusiven Klientel von Privatjet-Eigentümern an.',
-        },
-        step2: {
-            ownerTitle: 'Erstellen Sie Ihr Eigentümer-Konto',
-            providerTitle: 'Erstellen Sie Ihr Anbieter-Konto',
-            companyName: 'Firmenname',
-            vatNumber: 'USt-IdNr.',
-            specialization: 'Spezialisierung',
-            specializationPlaceholder: 'z.B. Innenlederpflege',
-            email: 'E-Mail-Adresse',
-            password: 'Passwort',
-            disclaimer: 'Nach der Registrierung wird unser Team Ihren Antrag prüfen. Für Eigentümer ist ein Eigentumsnachweis erforderlich. Für Anbieter wird eine vollständige Prüfung durchgeführt.',
-            submitButton: 'Antrag einreichen',
-        },
-        step3: {
-            title: 'Vielen Dank!',
-            subtitle: 'Ihr Antrag wurde eingereicht. Unser Team wird Ihre Informationen prüfen und sich innerhalb von 2-3 Werktagen bei Ihnen melden.',
-            backToLogin: 'Zurück zum Login',
-        }
-    },
-    header: {
-        newRequest: 'Neue Anfrage',
-        notifications: 'Benachrichtigungen',
-        viewAll: 'Alle anzeigen',
-    },
-    sidebar: {
-        dashboard: 'Dashboard',
-        fleet: 'Meine Flotte',
-        requests: 'Serviceanfragen',
-        billing: 'Abrechnung',
-        settings: 'Einstellungen',
-        concierge: 'Benötigen Sie Concierge-Service?',
-        contactSupport: 'Support kontaktieren',
-    },
-    dashboard: {
-        title: 'Dashboard',
-        welcome: 'Willkommen zurück, J. van der Berg!',
-        activeRequests: 'Aktive Anfragen',
-        pendingActions: 'Ausstehende Aktionen',
-        fleetStatus: 'Flottenstatus',
-        recentInvoices: 'Letzte Rechnungen',
-        noActiveRequests: 'Keine aktiven Serviceanfragen.',
-        noPendingActions: 'Keine Elemente erfordern Ihre Aktion.',
-        viewFleet: 'Flotte anzeigen',
-        viewRequests: 'Anfragen anzeigen',
-        viewInvoices: 'Alle Rechnungen anzeigen',
-        approveService: 'Service für {0} genehmigen',
-    },
-    fleet: {
-        title: 'Meine Flotte',
-        addAircraft: 'Flugzeug hinzufügen',
-        range: 'Reichweite',
-        seats: 'Sitzplätze',
-        lastService: 'Letzter Service',
-    },
-    requests: {
-        title: 'Serviceanfragen',
-        details: 'Details',
-        aircraft: 'Flugzeug',
-        service: 'Service',
-        locationTime: 'Ort & Zeit',
-        status: 'Status',
-        actions: 'Aktionen',
-    },
-    newRequest: {
-        title: 'Neue Serviceanfrage erstellen',
-        aircraft: 'Flugzeug',
-        selectAircraft: 'Flugzeug auswählen...',
-        serviceType: 'Servicetyp',
-        selectService: 'Service auswählen...',
-        location: 'Standort',
-        selectAirport: 'Flughafen auswählen...',
-        desiredTime: 'Gewünschte Zeit',
-        urgency: 'Dringlichkeit',
-        standaard: 'Standard',
-        spoed: 'Dringend',
-        instructions: 'Besondere Anweisungen',
-        instructionsPlaceholder: 'z.B. Fokus auf das Cockpit-Leder, bestimmte Reinigungsprodukte verwenden...',
-    },
-    requestDetails: {
-        back: 'Zurück zu den Anfragen',
-        statusTimeline: 'Status-Zeitleiste',
-        photoGallery: 'Fotogalerie',
-        before: 'Vorher',
-        after: 'Nachher',
-        checklist: 'Service-Checkliste',
-        chat: 'Kommunikation',
-        sendMessage: 'Nachricht senden',
-        typeMessage: 'Geben Sie Ihre Nachricht ein...',
-        approveService: 'Service genehmigen',
-        requestChanges: 'Änderungen anfordern',
-    },
-    jetStatus: {
-        'Ready': 'Bereit',
-        'Service Due': 'Service fällig',
-        'In Service': 'Im Service',
-    },
-    requestStatus: {
-        'REQUESTED': 'Angefragt',
-        'ASSIGNED': 'Zugewiesen',
-        'IN_PROGRESS': 'In Bearbeitung',
-        'COMPLETED': 'Abgeschlossen zur Genehmigung',
-        'APPROVED': 'Genehmigt',
-        'CANCELLED': 'Storniert',
-    },
-    user: {
-        role: {
-            operator: 'Betreiber'
-        }
-    }
-};
+// This creates a union type of all possible translation keys
+type NestedKeys<T> = T extends object ? {
+    [K in keyof T]: `${Exclude<K, symbol>}${"" | `.${NestedKeys<T[K]>}`}`
+}[keyof T] : "";
 
-export const translations = { en, nl, fr, de };
-
-// This generates a union type of all possible translation keys
-type PathImpl<T, K extends keyof T> =
-  K extends string
-  ? T[K] extends Record<string, any>
-    ? `${K}.${PathImpl<T[K], keyof T[K]>}`
-    : K
-  : never;
-type Path<T> = PathImpl<T, keyof T>;
-export type TranslationKey = Path<typeof en>;
+export type TranslationKey = NestedKeys<typeof en>;

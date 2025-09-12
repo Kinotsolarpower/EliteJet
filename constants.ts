@@ -1,18 +1,14 @@
-import { Jet, ServiceRequest, RequestStatus, JetStatus, Notification, Invoice, User } from './types';
-
-export const MOCK_USER: User = {
-    name: 'J. van der Berg',
-    role: 'Operator',
-    avatarUrl: 'https://picsum.photos/seed/user/100/100',
-};
+import { Jet, ServiceRequest, RequestStatus, JetStatus, Notification, Invoice, CrewMember, ChecklistItemStatus, VeritasStatus } from './types';
 
 export const MOCK_JETS: Jet[] = [
     {
         id: 'jet-1',
         name: 'The Falcon',
-        model: 'Dassault Falcon 7X',
+        brand: 'Dassault',
+        type: 'Falcon',
+        version: '7X',
         tailNumber: 'OO-JNS',
-        imageUrl: 'https://images.unsplash.com/photo-1628544521471-a4cb31189b8b?q=80&w=800',
+        imageUrl: '/assets/images/jet1.jpg',
         range: 5950,
         seats: 16,
         lastServiceDate: '2024-07-15',
@@ -21,9 +17,11 @@ export const MOCK_JETS: Jet[] = [
     {
         id: 'jet-2',
         name: 'Gulfstream',
-        model: 'Gulfstream G650',
+        brand: 'Gulfstream',
+        type: 'G650',
+        version: '',
         tailNumber: 'OO-WIK',
-        imageUrl: 'https://images.unsplash.com/photo-1530522137936-ce1634455879?q=80&w=800',
+        imageUrl: '/assets/images/jet2.jpg',
         range: 7500,
         seats: 19,
         lastServiceDate: '2024-05-20',
@@ -32,14 +30,57 @@ export const MOCK_JETS: Jet[] = [
     {
         id: 'jet-3',
         name: 'Global Express',
-        model: 'Bombardier Global 6000',
+        brand: 'Bombardier',
+        type: 'Global',
+        version: '6000',
         tailNumber: 'OO-PRV',
-        imageUrl: 'https://images.unsplash.com/photo-1618088359282-7d35e577a641?q=80&w=800',
+        imageUrl: '/assets/images/jet3.jpg',
         range: 6000,
         seats: 17,
         lastServiceDate: '2024-08-01',
         status: 'Ready',
     }
+];
+
+export const JET_BRAND_OPTIONS = [
+    { brand: 'Dassault', type: 'Falcon', imageUrl: '/assets/images/jet1.jpg' },
+    { brand: 'Gulfstream', type: 'G650', imageUrl: '/assets/images/jet2.jpg' },
+    { brand: 'Bombardier', type: 'Global', imageUrl: '/assets/images/jet3.jpg' },
+    { brand: 'Cessna', type: 'Citation', imageUrl: 'https://images.unsplash.com/photo-1541893361138-28562162a893?q=80&w=800' },
+    { brand: 'Embraer', type: 'Praetor', imageUrl: 'https://images.unsplash.com/photo-1614041113234-b5a7885b00a5?q=80&w=800' },
+];
+
+export const SERVICE_PACKAGES = [
+    {
+        id: 'essential',
+        nameKey: 'servicePackages.essential.name',
+        priceKey: 'servicePackages.essential.price',
+        featuresKey: 'servicePackages.essential.features',
+        idealForKey: 'servicePackages.essential.idealFor',
+        isPopular: false,
+    },
+    {
+        id: 'premium',
+        nameKey: 'servicePackages.premium.name',
+        priceKey: 'servicePackages.premium.price',
+        featuresKey: 'servicePackages.premium.features',
+        idealForKey: 'servicePackages.premium.idealFor',
+        isPopular: true,
+    },
+    {
+        id: 'elite',
+        nameKey: 'servicePackages.elite.name',
+        priceKey: 'servicePackages.elite.price',
+        featuresKey: 'servicePackages.elite.features',
+        idealForKey: 'servicePackages.elite.idealFor',
+        isPopular: false,
+    }
+];
+
+const MOCK_CREW: CrewMember[] = [
+    { id: 'cw-1', name: 'Jean-Luc Dubois', role: 'Team Lead', photoUrl: 'https://i.pravatar.cc/150?u=jl', certifications: ['Advanced Detailing', 'Leather Care Specialist'] },
+    { id: 'cw-2', name: 'Sophie Leroy', role: 'Detailing Technician', photoUrl: 'https://i.pravatar.cc/150?u=sl', certifications: ['Exterior Polish & Wax', 'Safety Certified'] },
+    { id: 'as-1', name: 'Tom Willems', role: 'Interior Specialist', photoUrl: 'https://i.pravatar.cc/150?u=tw', certifications: ['Upholstery Master', 'Wood & Veneer Care'] },
 ];
 
 export const MOCK_REQUESTS: ServiceRequest[] = [
@@ -53,14 +94,12 @@ export const MOCK_REQUESTS: ServiceRequest[] = [
         status: RequestStatus.APPROVED,
         provider: 'CleanWings Inc.',
         cost: 2500,
-        photos: {
-            before: ['https://picsum.photos/seed/before1/400/300', 'https://picsum.photos/seed/before2/400/300'],
-            after: ['https://picsum.photos/seed/after1/400/300', 'https://picsum.photos/seed/after2/400/300']
-        },
+        veritasStatus: 'CERTIFIED',
+        crew: [MOCK_CREW[0], MOCK_CREW[1]],
         checklist: [
-            { itemKey: 'exterior_wash', completed: true },
-            { itemKey: 'windows_polished', completed: true },
-            { itemKey: 'landing_gear', completed: true },
+            { itemKey: 'exterior_wash', status: 'APPROVED', beforePhotoUrl: 'https://images.unsplash.com/photo-1621489433241-3533295844a4?q=80&w=400', afterPhotoUrl: 'https://images.unsplash.com/photo-1605600652156-0557297e65b4?q=80&w=400' },
+            { itemKey: 'windows_polished', status: 'FLAGGED', beforePhotoUrl: 'https://images.unsplash.com/photo-1577922251203-d52f865a5c43?q=80&w=400', afterPhotoUrl: 'https://images.unsplash.com/photo-1549289297-6353265b0351?q=80&w=400' },
+            { itemKey: 'landing_gear', status: 'APPROVED', beforePhotoUrl: 'https://images.unsplash.com/photo-1555531738-9f15041a3946?q=80&w=400', afterPhotoUrl: 'https://images.unsplash.com/photo-1589552632299-1a4a45a89467?q=80&w=400' },
         ],
         messages: [],
         history: [
@@ -81,14 +120,12 @@ export const MOCK_REQUESTS: ServiceRequest[] = [
         status: RequestStatus.IN_PROGRESS,
         provider: 'AeroShine Belgium',
         cost: 3200,
-        photos: {
-            before: ['https://picsum.photos/seed/before3/400/300'],
-            after: []
-        },
+        veritasStatus: 'PENDING',
+        crew: [MOCK_CREW[2]],
         checklist: [
-            { itemKey: 'cabin_cleaned', completed: true },
-            { itemKey: 'cockpit_detailed', completed: true },
-            { itemKey: 'lavatory_sanitized', completed: false },
+            { itemKey: 'cabin_cleaned', status: 'APPROVED' },
+            { itemKey: 'cockpit_detailed', status: 'PENDING' },
+            { itemKey: 'lavatory_sanitized', status: 'PENDING' },
         ],
         messages: [
             { id: 'msg-1', sender: 'provider', text: 'We have started the interior cleaning for OO-WIK.', timestamp: '2024-08-20T09:35Z' },
@@ -110,8 +147,14 @@ export const MOCK_REQUESTS: ServiceRequest[] = [
         status: RequestStatus.ASSIGNED,
         provider: 'JetCare Specialists',
         cost: 5500,
-        photos: { before: [], after: [] },
-        checklist: [],
+        veritasStatus: 'PENDING',
+        checklist: [
+             { itemKey: 'exterior_wash', status: 'PENDING' },
+             { itemKey: 'windows_polished', status: 'PENDING' },
+             { itemKey: 'landing_gear', status: 'PENDING' },
+             { itemKey: 'cabin_cleaned', status: 'PENDING' },
+             { itemKey: 'cockpit_detailed', status: 'PENDING' },
+        ],
         messages: [],
         history: [
             { status: RequestStatus.REQUESTED, timestamp: '2024-08-21T15:00Z'},
@@ -126,7 +169,7 @@ export const MOCK_REQUESTS: ServiceRequest[] = [
         dateTime: '2024-08-25T11:00',
         urgency: 'Standaard',
         status: RequestStatus.REQUESTED,
-        photos: { before: [], after: [] },
+        veritasStatus: 'PENDING',
         checklist: [],
         messages: [],
         history: [
@@ -142,7 +185,28 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
 ];
 
 export const MOCK_INVOICES: Invoice[] = [
-    { id: 'INV001', requestId: 'req-1', amount: 2500, date: '2024-08-16', status: 'Paid' }
+    { 
+        id: 'INV001', 
+        requestId: 'req-1', 
+        amount: 2500, 
+        date: '2024-08-16', 
+        status: 'Paid',
+        jetName: 'The Falcon',
+        jetTailNumber: 'OO-JNS',
+        serviceType: 'Exterieur Reiniging',
+        paymentMethod: 'Visa **** 4242',
+        transactionId: 'ch_3PjQ8z...',
+    },
+    { 
+        id: 'INV002', 
+        requestId: 'req-2', 
+        amount: 3200, 
+        date: '2024-08-21', 
+        status: 'Due',
+        jetName: 'Gulfstream',
+        jetTailNumber: 'OO-WIK',
+        serviceType: 'Interieur Reiniging',
+    }
 ];
 
 export const STATUS_CONFIG: { [key in RequestStatus]: { color: string; bgColor: string; } } = {
@@ -170,7 +234,6 @@ export const JET_STATUS_CONFIG: { [key in JetStatus]: { color: string; bgColor: 
 };
 
 
-export const SERVICE_OPTIONS = ["Interieur Reiniging", "Exterieur Reiniging", "Beide", "Diepte Reiniging", "Onderhoud Interieur"];
 export const AIRPORT_OPTIONS = ["EBBR (Brussels)", "EBAW (Antwerp)", "EBLG (Liège)", "EBCI (Charleroi)", "EBOS (Ostend-Bruges)"];
 export const URGENCY_OPTIONS = ["Standaard", "Spoed"];
 export const CHECKLIST_ITEMS = {

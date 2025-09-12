@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Logo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg
-        width="200"
+        width="280"
         height="40"
         viewBox="0 0 200 40"
         fill="none"

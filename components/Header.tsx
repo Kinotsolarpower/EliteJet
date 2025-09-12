@@ -5,10 +5,12 @@ import { PlusIcon } from './icons/PlusIcon';
 import { MenuIcon } from './icons/MenuIcon';
 import { useTranslation } from '../lib/i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { MOCK_NOTIFICATIONS, MOCK_USER } from '../constants';
-import { Notification } from '../types';
+import { MOCK_NOTIFICATIONS } from '../constants';
+import { Notification, User } from '../types';
 
 interface HeaderProps {
+    user: User;
+    onLogout: () => void;
     onNewRequestClick: () => void;
     toggleSidebar: () => void;
 }
@@ -20,9 +22,10 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
     </div>
 );
 
-export const Header: React.FC<HeaderProps> = ({ onNewRequestClick, toggleSidebar }) => {
+export const Header: React.FC<HeaderProps> = ({ user, onLogout, onNewRequestClick, toggleSidebar }) => {
     const { t } = useTranslation();
     const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [profileOpen, setProfileOpen] = useState(false);
     const unreadCount = MOCK_NOTIFICATIONS.filter(n => !n.isRead).length;
 
     return (
@@ -68,15 +71,27 @@ export const Header: React.FC<HeaderProps> = ({ onNewRequestClick, toggleSidebar
                     )}
                 </div>
 
-                <div className="flex items-center space-x-3">
-                    <img className="h-10 w-10 rounded-full object-cover" src={MOCK_USER.avatarUrl} alt="User" />
-                    <div className="hidden md:block">
-                        <p className="font-semibold text-white">{MOCK_USER.name}</p>
-                        <p className="text-sm text-slate-400">{t('user.role.operator')}</p>
-                    </div>
-                    <button className="text-slate-400 hover:text-white hidden md:block">
-                        <ChevronDownIcon className="h-5 w-5" />
+                <div className="relative">
+                    <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center space-x-3">
+                        <img className="h-10 w-10 rounded-full object-cover" src={user.avatarUrl} alt="User" />
+                        <div className="hidden md:block">
+                            <p className="font-semibold text-white">{user.name}</p>
+                            <p className="text-sm text-slate-400">{user.role}</p>
+                        </div>
+                        <div className="text-slate-400 hover:text-white hidden md:block">
+                            <ChevronDownIcon className="h-5 w-5" />
+                        </div>
                     </button>
+                    {profileOpen && (
+                         <div className="absolute right-0 mt-2 w-48 bg-accent rounded-lg shadow-xl overflow-hidden border border-accent-dark animate-fade-in-up">
+                             <button
+                                onClick={onLogout}
+                                className="w-full text-left p-3 text-sm text-slate-200 hover:bg-accent-dark"
+                             >
+                                Logout
+                             </button>
+                         </div>
+                    )}
                 </div>
             </div>
         </header>

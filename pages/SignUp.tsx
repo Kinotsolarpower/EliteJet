@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Page } from '../App';
 import { UserGroupIcon } from '../components/icons/UserGroupIcon';
@@ -5,17 +6,29 @@ import { WrenchIcon } from '../components/icons/WrenchIcon';
 import { Logo } from '../components/icons/Logo';
 import { useTranslation } from '../lib/i18n';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { User } from '../types';
 
 interface SignUpProps {
     setPage: (page: Page) => void;
+    onSignUpSuccess: (newUser: Omit<User, 'avatarUrl' | 'onboardingCompleted'>) => void;
 }
 
 type Role = 'owner' | 'provider';
 
-export const SignUp: React.FC<SignUpProps> = ({ setPage }) => {
+export const SignUp: React.FC<SignUpProps> = ({ setPage, onSignUpSuccess }) => {
     const { t } = useTranslation();
     const [step, setStep] = useState(1);
     const [role, setRole] = useState<Role | null>(null);
+
+    // Form state
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [termsAgreed, setTermsAgreed] = useState(false);
+    const [specialization, setSpecialization] = useState('');
+
 
     const selectRole = (selectedRole: Role) => {
         setRole(selectedRole);
@@ -24,7 +37,19 @@ export const SignUp: React.FC<SignUpProps> = ({ setPage }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setStep(3);
+        if (role === 'owner') {
+            if (!termsAgreed) return;
+            onSignUpSuccess({
+                name: `${firstName} ${lastName}`,
+                firstName,
+                lastName,
+                companyName,
+                role: 'Client',
+            });
+        } else {
+             // Provider flow leads to verification
+            setStep(3);
+        }
     };
 
     const renderStep = () => {
@@ -52,45 +77,66 @@ export const SignUp: React.FC<SignUpProps> = ({ setPage }) => {
                 );
             case 2:
                 const inputClasses = "w-full p-2 bg-accent-dark border-slate-600 border rounded-md shadow-sm focus:ring-secondary focus:border-secondary text-white";
+                const isOwner = role === 'owner';
                 return (
                     <>
                         <h2 className="text-2xl font-bold text-white mb-6">
-                           {role === 'owner' ? t('signup.step2.ownerTitle') : t('signup.step2.providerTitle')}
+                           {isOwner ? t('signup.step2.ownerTitle') : t('signup.step2.providerTitle')}
                         </h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.companyName')}</label>
-                                <input type="text" required className={inputClasses} />
-                            </div>
-                             {role === 'owner' && (
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.vatNumber')}</label>
-                                    <input type="text" required className={inputClasses} />
+                            {isOwner && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.firstName')}</label>
+                                        <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required className={inputClasses} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.lastName')}</label>
+                                        <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} required className={inputClasses} />
+                                    </div>
                                 </div>
                             )}
+                            <div>
+                                <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.companyName')}</label>
+                                <input type="text" value={companyName} onChange={e => setCompanyName(e.target.value)} required className={inputClasses} />
+                            </div>
+                            
                             {role === 'provider' && (
                                 <div>
                                     <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.specialization')}</label>
-                                    <input type="text" placeholder={t('signup.step2.specializationPlaceholder')} required className={inputClasses} />
+                                    <input type="text" value={specialization} onChange={e => setSpecialization(e.target.value)} placeholder={t('signup.step2.specializationPlaceholder')} required className={inputClasses} />
                                 </div>
                             )}
                             <div>
                                 <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.email')}</label>
-                                <input type="email" required className={inputClasses} />
+                                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className={inputClasses} />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-300 mb-1">{t('signup.step2.password')}</label>
-                                <input type="password" required className={inputClasses} />
+                                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required className={inputClasses} />
                             </div>
-                            <p className="text-xs text-slate-400 pt-2">
-                               {t('signup.step2.disclaimer')}
-                            </p>
+
+                             {isOwner && (
+                                <div className="pt-2">
+                                    <label className="flex items-center">
+                                        <input type="checkbox" checked={termsAgreed} onChange={(e) => setTermsAgreed(e.target.checked)} className="h-4 w-4 rounded border-slate-600 bg-accent-dark text-secondary focus:ring-secondary" />
+                                        <span className="ml-2 text-sm text-slate-300">{t('signup.step2.agreeToTerms')}</span>
+                                    </label>
+                                </div>
+                            )}
+
+                            {!isOwner && (
+                                <p className="text-xs text-slate-400 pt-2">
+                                    {t('signup.step2.disclaimer')}
+                                </p>
+                            )}
+
                             <div className="flex justify-between items-center pt-4">
-                                <button type="button" onClick={() => setStep(1)} className="text-sm font-semibold text-slate-300">
+                                <button type="button" onClick={() => setStep(1)} className="text-sm font-semibold text-slate-300 hover:text-white">
                                     &larr; {t('common.back')}
                                 </button>
-                                <button type="submit" className="py-2 px-6 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700">
-                                    {t('signup.step2.submitButton')}
+                                <button type="submit" disabled={isOwner && !termsAgreed} className="py-2 px-6 bg-secondary text-white font-semibold rounded-lg hover:bg-green-700 disabled:bg-slate-500 disabled:cursor-not-allowed">
+                                    {isOwner ? t('signup.step2.submitButton') : t('signup.step2.submitApplication')}
                                 </button>
                             </div>
                         </form>
@@ -114,19 +160,29 @@ export const SignUp: React.FC<SignUpProps> = ({ setPage }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-primary p-4">
-             <header className="absolute top-0 right-0 p-6">
+        <div className="relative min-h-screen flex flex-col items-center justify-center bg-primary p-4 overflow-hidden">
+            <div 
+                className="absolute inset-0 bg-cover bg-center opacity-10"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1544012579-679b36f1b34e?q=80&w=2000')" }}
+            ></div>
+             <header className="absolute top-0 right-0 p-6 z-10">
                 <LanguageSwitcher />
             </header>
-            <div className="w-full max-w-3xl">
+            <div className="w-full max-w-3xl z-10">
                 <div className="text-center mb-8">
-                     <div className="flex justify-center cursor-pointer" onClick={() => setPage('landing')}>
+                     <button onClick={() => setPage('landing')} className="flex justify-center w-full" aria-label="Go to homepage">
                         <Logo className="h-12 w-auto" />
-                    </div>
+                    </button>
                 </div>
                 <div className="bg-accent rounded-lg shadow-md p-6 md:p-8">
                    {renderStep()}
                 </div>
+                <p className="text-center text-sm text-slate-400 mt-6">
+                    {t('signup.alreadyAccount')}{' '}
+                    <button onClick={() => setPage('login')} className="font-semibold text-secondary hover:underline">
+                        {t('signup.loginLink')}
+                    </button>
+                </p>
             </div>
         </div>
     );

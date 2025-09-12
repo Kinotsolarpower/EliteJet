@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { PlaneIcon } from './icons/PlaneIcon';
 import { WrenchScrewdriverIcon } from './icons/WrenchScrewdriverIcon';
@@ -7,14 +8,18 @@ import { ChartBarIcon } from './icons/ChartBarIcon';
 import { Logo } from './icons/Logo';
 import { useTranslation } from '../lib/i18n';
 import { XMarkIcon } from './icons/XMarkIcon';
+import { TranslationKey } from '../translations';
+import { User } from '../types';
 
 export type View = 'dashboard' | 'fleet' | 'requests' | 'billing' | 'settings';
 
 interface SidebarProps {
+    user: User;
     activeView: View;
     setActiveView: (view: View) => void;
     isOpen: boolean;
     toggleSidebar: () => void;
+    onLogoClick: () => void;
 }
 
 const NavItem: React.FC<{
@@ -36,7 +41,7 @@ const NavItem: React.FC<{
     </li>
 );
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isOpen, toggleSidebar }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ user, activeView, setActiveView, isOpen, toggleSidebar, onLogoClick }) => {
     const { t } = useTranslation();
     
     const handleNavigation = (view: View) => {
@@ -45,6 +50,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
             toggleSidebar();
         }
     }
+
+    const allNavItems: { view: View; icon: React.ReactNode; labelKey: TranslationKey }[] = [
+        { view: 'dashboard', icon: <ChartBarIcon className="h-6 w-6" />, labelKey: 'sidebar.dashboard' },
+        { view: 'fleet', icon: <PlaneIcon className="h-6 w-6" />, labelKey: 'sidebar.fleet' },
+        { view: 'requests', icon: <WrenchScrewdriverIcon className="h-6 w-6" />, labelKey: 'sidebar.requests' },
+        { view: 'billing', icon: <DocumentTextIcon className="h-6 w-6" />, labelKey: 'sidebar.billing' },
+        { view: 'settings', icon: <CogIcon className="h-6 w-6" />, labelKey: 'sidebar.settings' },
+    ];
+    
+    // Both user roles currently have access to the same set of views.
+    // This can be customized later if operator-specific views are added.
+    const visibleNavItems = allNavItems;
+
 
     return (
         <>
@@ -55,43 +73,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
             ></div>
             <aside className={`fixed top-0 left-0 h-full w-64 bg-primary text-white flex flex-col p-4 z-40 transform transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="flex items-center justify-between h-16 mb-6">
-                     <Logo className="h-10 w-auto" />
+                     <button onClick={onLogoClick} aria-label="Go to homepage">
+                        <Logo className="h-10 w-auto" />
+                     </button>
                      <button onClick={toggleSidebar} className="text-gray-400 hover:text-white lg:hidden">
                         <XMarkIcon className="h-6 w-6" />
                      </button>
                 </div>
                 <nav>
                     <ul>
-                        <NavItem
-                            icon={<ChartBarIcon className="h-6 w-6" />}
-                            label={t('sidebar.dashboard')}
-                            isActive={activeView === 'dashboard'}
-                            onClick={() => handleNavigation('dashboard')}
-                        />
-                        <NavItem
-                            icon={<PlaneIcon className="h-6 w-6" />}
-                            label={t('sidebar.fleet')}
-                            isActive={activeView === 'fleet'}
-                            onClick={() => handleNavigation('fleet')}
-                        />
-                        <NavItem
-                            icon={<WrenchScrewdriverIcon className="h-6 w-6" />}
-                            label={t('sidebar.requests')}
-                            isActive={activeView === 'requests'}
-                            onClick={() => handleNavigation('requests')}
-                        />
-                        <NavItem
-                            icon={<DocumentTextIcon className="h-6 w-6" />}
-                            label={t('sidebar.billing')}
-                            isActive={activeView === 'billing'}
-                            onClick={() => handleNavigation('billing')}
-                        />
-                         <NavItem
-                            icon={<CogIcon className="h-6 w-6" />}
-                            label={t('sidebar.settings')}
-                            isActive={activeView === 'settings'}
-                            onClick={() => handleNavigation('settings')}
-                        />
+                       {visibleNavItems.map(item => (
+                            <NavItem
+                                key={item.view}
+                                icon={item.icon}
+                                label={t(item.labelKey)}
+                                isActive={activeView === item.view}
+                                onClick={() => handleNavigation(item.view)}
+                            />
+                        ))}
                     </ul>
                 </nav>
                 <div className="mt-auto p-4 bg-accent rounded-lg text-center">
